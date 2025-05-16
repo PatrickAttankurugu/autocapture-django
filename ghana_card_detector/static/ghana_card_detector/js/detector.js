@@ -1,5 +1,10 @@
 class GhanaCardDetector {
     constructor() {
+        // Django-specific configuration
+        this.apiUrl = window.VERIFY_API_URL || '/api/verify/';
+        this.csrfToken = window.CSRF_TOKEN || '';
+        this.modelPath = window.MODEL_PATH || '/static/ghana_card_detector/models/autocapture.tflite';
+        
         // DOM Elements
         this.videoElement = document.getElementById('webcam');
         this.canvas = document.getElementById('detection-canvas');
@@ -28,7 +33,6 @@ class GhanaCardDetector {
         this.capturedCtx.fillText('No card captured yet', this.capturedCanvas.width / 2, this.capturedCanvas.height / 2);
         
         // Detection parameters
-        this.modelPath = 'models/autocapture.tflite';
         this.model = null;
         this.modelLoaded = false;
         this.cameraActive = false;
@@ -37,7 +41,7 @@ class GhanaCardDetector {
         this.cardCaptured = false;
         
         // Detection thresholds
-        this.consecutiveDetections = 10;
+        this.consecutiveDetections = 0;
         this.minConsecutiveDetections = 3;
         this.confidenceThreshold = 0.85;
         
@@ -78,7 +82,7 @@ class GhanaCardDetector {
             this.modelLoaded = true;
             
             this.setStatus('Model loaded successfully. Ready to start camera.', 'status-success');
-            this.setModelStatus(`Model loaded: YOLOv8 TFLite (${this.modelPath})`);
+            this.setModelStatus(`Model loaded: YOLOv8 TFLite`);
             
             // Auto-start camera after model loads
             this.startCamera();
@@ -613,13 +617,17 @@ class GhanaCardDetector {
             const formData = new FormData();
             formData.append('card_image', blob, 'ghana_card.jpg');
             
-            // Replace with your actual backend API endpoint
-            const apiUrl = 'https://backend-api.com/verify';
+            // Django API endpoint from the template variable
+            const apiUrl = this.apiUrl;
             
-            // Send to backend
+            // Send to backend with CSRF token
             fetch(apiUrl, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'X-CSRFToken': this.csrfToken
+                },
+                credentials: 'same-origin'
             })
             .then(response => {
                 if (!response.ok) {
@@ -631,6 +639,15 @@ class GhanaCardDetector {
                 // Handle successful response
                 this.setStatus(`Verification successful! Card is ${data.valid ? 'valid' : 'invalid'}`, 'status-success');
                 this.captureStatusElement.textContent = `Verification result: ${data.valid ? 'Valid' : 'Invalid'} Ghana Card`;
+                
+                // If the response includes additional details, display them
+                if (data.message) {
+                    console.log("Server message:", data.message);
+                }
+                
+                if (data.card_id) {
+                    this.captureStatusElement.textContent += ` (ID: ${data.card_id})`;
+                }
             })
             .catch(error => {
                 // Handle errors

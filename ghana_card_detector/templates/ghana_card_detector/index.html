@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ghana Card Auto-Capture{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'ghana_card_detector/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="gc-container">
+    <h1>Ghana Card Auto-Capture</h1>
+    
+    <div class="gc-status-container">
+        <div id="status" class="gc-status">Initializing detector...</div>
+        <div id="model-status" class="gc-model-status"></div>
+    </div>
+    
+    <div class="gc-camera-container">
+        <div id="video-container">
+            <video id="webcam" autoplay playsinline></video>
+            <canvas id="detection-canvas"></canvas>
+            <div class="guide-overlay">
+                <div class="card-guide"></div>
+            </div>
+        </div>
+        
+        <div class="gc-controls">
+            <button id="start-btn" class="gc-btn">Start Camera</button>
+            <button id="capture-btn" class="gc-btn" disabled>Manual Capture</button>
+            <button id="auto-capture-btn" class="gc-btn" disabled>Enable Auto-Capture</button>
+        </div>
+    </div>
+    
+    <div class="gc-result-container">
+        <h2>Captured Card</h2>
+        <canvas id="captured-card"></canvas>
+        <div class="gc-capture-info">
+            <div id="capture-status">No card captured yet</div>
+            <button id="send-btn" class="gc-btn gc-send-btn" disabled>Submit</button>
+        </div>
+    </div>
+    
+    <div class="gc-instructions">
+        <h3>Instructions</h3>
+        <ol>
+            <li>Click "Start Camera" to access your device camera</li>
+            <li>Position your Ghana Card within the guide frame</li>
+            <li>Enable auto-capture or click "Manual Capture"</li>
+            <li>The detector will automatically capture well-aligned cards</li>
+            <li>Click "Submit" to verify the captured card</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- TensorFlow.js Core -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+<!-- TFLite Support -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.9/dist/tf-tflite.min.js"></script>
+<!-- Ghana Card Detector Script -->
+<script src="{% static 'ghana_card_detector/js/detector.js' %}"></script>
+
+<script>
+    // Django-specific configurations
+    const VERIFY_API_URL = "{% url 'ghana_card_detector:verify_card' %}";
+    const CSRF_TOKEN = "{{ csrf_token }}";
+    const MODEL_PATH = "{% static 'ghana_card_detector/models/autocapture.tflite' %}";
+</script>
+{% endblock %}

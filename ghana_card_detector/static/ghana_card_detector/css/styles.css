@@ -7,42 +7,14 @@
     --border-color: #dee2e6;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f5f5f5;
-}
-
-.container {
+/* Ghana Card detector specific styles */
+.gc-container {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--dark-color);
-}
-
-h2 {
-    margin-bottom: 15px;
-    color: var(--dark-color);
-}
-
-h3 {
-    margin-bottom: 10px;
-    color: var(--dark-color);
-}
-
-.status-container {
+.gc-status-container {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
@@ -52,16 +24,16 @@ h3 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.status {
+.gc-status {
     font-weight: bold;
 }
 
-.model-status {
+.gc-model-status {
     color: var(--primary-color);
     font-size: 0.9rem;
 }
 
-.camera-container {
+.gc-camera-container {
     margin-bottom: 30px;
 }
 
@@ -113,14 +85,14 @@ h3 {
     aspect-ratio: 1.585;
 }
 
-.controls {
+.gc-controls {
     display: flex;
     justify-content: center;
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.btn {
+.gc-btn {
     padding: 10px 20px;
     background-color: var(--primary-color);
     color: white;
@@ -131,17 +103,17 @@ h3 {
     transition: background-color 0.2s;
 }
 
-.btn:hover {
+.gc-btn:hover {
     background-color: #0069d9;
 }
 
-.btn:disabled {
+.gc-btn:disabled {
     background-color: #6c757d;
     cursor: not-allowed;
     opacity: 0.65;
 }
 
-.result-container {
+.gc-result-container {
     margin-bottom: 30px;
     padding: 20px;
     background-color: white;
@@ -159,7 +131,7 @@ h3 {
     background-color: #f0f0f0;
 }
 
-.capture-info {
+.gc-capture-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -170,26 +142,26 @@ h3 {
     color: #6c757d;
 }
 
-.send-btn {
+.gc-send-btn {
     background-color: var(--success-color);
 }
 
-.send-btn:hover {
+.gc-send-btn:hover {
     background-color: #218838;
 }
 
-.instructions {
+.gc-instructions {
     padding: 20px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.instructions ol {
+.gc-instructions ol {
     padding-left: 20px;
 }
 
-.instructions li {
+.gc-instructions li {
     margin-bottom: 8px;
 }
 
@@ -216,26 +188,26 @@ h3 {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .container {
+    .gc-container {
         padding: 15px;
     }
     
-    .controls {
+    .gc-controls {
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
     }
     
-    .btn {
+    .gc-btn {
         width: 100%;
     }
     
-    .capture-info {
+    .gc-capture-info {
         flex-direction: column;
         gap: 15px;
     }
     
-    .send-btn {
+    .gc-send-btn {
         width: 100%;
     }
 }
